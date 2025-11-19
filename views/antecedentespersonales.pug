@@ -1,0 +1,74 @@
+extends layout
+
+block content
+
+  style.
+    .seccion {
+      background-color: rgb(179, 203, 224);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    .titulo-seccion {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .table th {
+      background-color: rgb(41, 108, 175);
+      color: #f8f9fa;
+      font-weight: bold;
+      text-align: center;
+    }
+    .table td {
+      border: 1px solid #dee2e6;
+    }
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .btn-registrar {
+      min-width: 200px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+    }
+    #mensajes { border-radius: 6px; font-size: 1rem; transition: all 0.3s ease; }
+
+  .card.shadow.mb-4
+    .card-body
+      h2.text-center.h5.mb-4 Registro de Antecedentes Personales
+      include componentes/_busquedaPaciente.pug
+      #datosPaciente
+
+  .card.shadow.seccion(style="display:none;" id="seccionAntecedentes")
+    .card-body
+      h3.titulo-seccion Antecedentes Personales
+
+      form#formAntecedente
+        #mensajesSeccion.mt-3.text-center
+        .row.mb-3
+          .col-md-5
+            label.form-label.text-center Tipo de Antecedente:
+            select.form-select#selectTipoAntecedente
+              option(value="") -- Seleccione --
+          .col-md-7
+            label.form-label.text-center Notas/Detalle:
+            input.form-control#notasdeltipo(type="text", maxlength="255", style="text-transform: uppercase;")
+
+        .d-flex.justify-content-end.mt-3
+          button.btn.btn-primary.btn-registrar(type="submit") Registrar Antecedente
+
+
+      table.table.table-bordered.table-sm.mt-4
+        thead
+          tr
+            th Fecha
+            th Médico
+            th Tipo de Antecedente
+            th Notas
+        tbody#tablaAntecedentes
+
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  script(type="module", src="/js/antecedentespersonales.js")

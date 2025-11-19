@@ -1,0 +1,92 @@
+extends layout
+
+block extraHead
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  script(type="module", src="/js/coberturas.js")
+
+block content
+  style.
+    .btn {
+      min-width: 35px;
+      padding: 0.25rem 0.5rem;
+    }
+    
+    #btnNuevo {
+      min-width: 200px;  
+      /*padding: 0.5rem 1rem; */
+    }
+
+    .card {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .acciones-botones {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    table th {
+      vertical-align: middle;
+      text-align: center;
+    }
+    
+    table td {
+      vertical-align: middle;
+    }
+
+    th.acciones, td.acciones {
+      width: 95px;
+      text-align: center;
+    }
+
+    th.den-col {
+      width: 250px;
+    }
+    
+    td.den-col {
+      width: 250px;
+      text-align: left;
+    }
+
+    .table th {
+      background-color: #343a40;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      padding: 0.75rem;
+    }
+
+    .contenedor-busqueda {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    #busquedaCobertura {
+      max-width: 400px;
+      flex-grow: 1;
+    }
+
+  .card.shadow
+    .card-body
+      h2.text-center.h5.mb-4 Administración de Coberturas
+
+      .contenedor-busqueda
+        input.form-control#busquedaCobertura(type="text", placeholder="Buscar por denominación")
+        button.btn.btn-dark#btnNuevo Nuevo
+
+      table.table.table-bordered.table-sm.text-center.mt-3
+        thead
+          tr
+            th.den-col Denominación
+            th.acciones Acciones
+        tbody#tablaCoberturas
+
+      nav.mt-3.d-flex.justify-content-center
+        ul.pagination#paginacionCoberturas

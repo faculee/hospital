@@ -1,0 +1,110 @@
+extends layout
+
+block extraHead
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  link(rel="stylesheet", href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css")
+  script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+  script(src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js")
+
+block content
+  .card.shadow
+    .card-body
+      h2.text-center.h5.mb-4 Listado de Médicos Registrados
+
+      .row.mb-4.justify-content-center
+        .col-md-4
+          .input-group
+            span.input-group-text.fw-bold Especialidad
+            select#filtroEspecialidad.form-select
+              option(value="todas" selected) Todas
+              if especialidades && especialidades.length
+                each esp in especialidades
+                  option(value=esp.denominacion)= esp.denominacion
+        .col-md-4
+          .input-group
+            span.input-group-text.fw-bold Estado
+            select#filtroEstado.form-select
+              option(value="todos" selected) Todos
+              option(value="activos") Activos
+              option(value="inactivos") Inactivos
+        .col-md-4
+          .input-group
+            span.input-group-text.fw-bold Buscar
+            input#buscadorPersonalizado.form-control(type="text", placeholder="Ingrese búsqueda...")
+
+      table#tablaMedicos.table.table-striped.mt-4
+        thead
+          tr
+            th Matrícula
+            th Apellido y Nombres
+            th Especialidad
+            th Teléfono
+            th Email
+            th Estado
+        tbody
+          if medicos && medicos.length
+            each medico in medicos
+              tr
+                td= medico.matricula
+                td= medico.apellidonombres
+                td= medico.especialidad ? medico.especialidad.denominacion : '---'
+                td= medico.telefono || '---'
+                td= medico.email || '---'
+                td= medico.deletedAt ? 'Inactivo' : 'Activo'
+          else
+            tr.no-data
+              td(colspan="6").text-center No hay médicos registrados.
+
+  script.
+    $(document).ready(function () {
+      if ($('#tablaMedicos tbody tr').not('.no-data').length > 0) {
+        const tabla = $('#tablaMedicos').DataTable({
+          paging: true,
+          searching: true,
+          info: true,
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+          },
+          columnDefs: [
+            { targets: [3, 4], searchable: false }
+          ],
+          initComplete: function () {
+            $('.dataTables_filter').hide();
+
+            $('#buscadorPersonalizado').on('keyup', function () {
+              tabla.search(this.value).draw();
+            });
+
+            $('.dataTables_paginate')
+              .addClass('d-flex justify-content-between align-items-center mt-3')
+              .find('a')
+              .addClass('btn btn-primary mx-1');
+
+            $('.dataTables_info')
+              .addClass('mt-3 fw-bold text-center w-100');
+          }
+        });
+
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+          const filtroEspecialidad = $('#filtroEspecialidad').val();
+          const filtroEstado = $('#filtroEstado').val();
+
+          const especialidad = data[2].trim();
+          const estado = data[5].trim();
+
+          const pasaFiltroEspecialidad = filtroEspecialidad === 'todas' || especialidad === filtroEspecialidad;
+          const pasaFiltroEstado =
+            filtroEstado === 'todos' ||
+            (filtroEstado === 'activos' && estado === 'Activo') ||
+            (filtroEstado === 'inactivos' && estado === 'Inactivo');
+
+          return pasaFiltroEspecialidad && pasaFiltroEstado;
+        });
+
+        $('#filtroEspecialidad, #filtroEstado').on('change', function () {
+          tabla.draw();
+        });
+      } else {
+        $('#customSearchContainer').html('<p class="text-muted text-center">No hay datos para mostrar</p>');
+      }
+    });

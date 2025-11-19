@@ -1,0 +1,56 @@
+extends layout
+
+block extraHead
+  link(rel="stylesheet", href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css")
+  script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+  script(src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js")
+
+block content
+  .card.shadow
+    .card-body
+      h2.text-center.h5.mb-4 Porcentaje de Ocupación de Camas por Unidad
+
+      .row.mb-4.justify-content-center
+        .col-md-6
+          .input-group
+            span.input-group-text.fw-bold Buscar
+            input#buscadorPersonalizado.form-control(type="text", placeholder="Ingrese búsqueda...")
+
+      table#tablaPorcentaje.table.table-striped.mt-4
+        thead
+          tr
+            th Unidad
+            th Total de Camas
+            th Camas Ocupadas
+            th Porcentaje de Ocupación
+        tbody
+          if datos && datos.length
+            each dato in datos
+              tr
+                td= dato.unidad
+                td.text-center= dato.total
+                td.text-center= dato.ocupadas
+                td.text-center= dato.porcentaje + '%'
+          else
+            tr
+              td(colspan="4").text-center No hay datos disponibles.
+
+block extraScripts
+  script.
+    $(document).ready(function () {
+      const tabla = $('#tablaPorcentaje').DataTable({
+        paging: false, 
+        searching: true,
+        info: false, 
+        language: {
+          url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+        },
+        initComplete: function () {
+          $('.dataTables_filter').hide();
+
+          $('#buscadorPersonalizado').on('keyup', function () {
+            tabla.search(this.value).draw();
+          });
+        }
+      });
+    });

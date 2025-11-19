@@ -1,0 +1,96 @@
+extends layout
+
+block extraHead
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  link(rel="stylesheet", href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css")
+  script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+  script(src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js")
+
+block content
+  .card.shadow
+    .card-body
+      h2.text-center.h5.mb-4 Listado de Enfermeros Registrados
+
+      .row.mb-4.justify-content-center
+        .col-md-4
+          .input-group
+            span.input-group-text.fw-bold Estado
+            select#filtroEstado.form-select
+              option(value="todos" selected) Todos
+              option(value="activos") Activos
+              option(value="inactivos") Inactivos
+        .col-md-4
+          .input-group
+            span.input-group-text.fw-bold Buscar
+            input#buscadorPersonalizado.form-control(type="text", placeholder="Ingrese búsqueda...")
+
+      table#tablaEnfermeros.table.table-striped.mt-4
+        thead
+          tr
+            th Matrícula
+            th Apellido y Nombres
+            th Teléfono
+            th Email
+            th Estado
+        tbody
+          if enfermeros && enfermeros.length
+            each enfermero in enfermeros
+              tr
+                td= enfermero.matricula
+                td= enfermero.apellidonombres
+                td= enfermero.telefono || '---'
+                td= enfermero.email || '---'
+                td= enfermero.deletedAt ? 'Inactivo' : 'Activo'
+          else
+            tr.no-data
+              td(colspan="5").text-center No hay enfermeros registrados.
+
+  script.
+    $(document).ready(function () {
+      if ($('#tablaEnfermeros tbody tr').not('.no-data').length > 0) {
+        const tabla = $('#tablaEnfermeros').DataTable({
+          paging: true,
+          searching: true,
+          info: true,
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+          },
+          columnDefs: [
+            { targets: [2, 3], searchable: false } // oculta búsqueda en Teléfono y Email
+          ],
+          initComplete: function () {
+            $('.dataTables_filter').hide();
+
+            $('#buscadorPersonalizado').on('keyup', function () {
+              tabla.search(this.value).draw();
+            });
+
+            $('.dataTables_paginate')
+              .addClass('d-flex justify-content-between align-items-center mt-3')
+              .find('a')
+              .addClass('btn btn-primary mx-1');
+
+            $('.dataTables_info')
+              .addClass('mt-3 fw-bold text-center w-100');
+          }
+        });
+
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+          const filtroEstado = $('#filtroEstado').val();
+          const estado = data[4].trim();
+
+          const pasaFiltroEstado =
+            filtroEstado === 'todos' ||
+            (filtroEstado === 'activos' && estado === 'Activo') ||
+            (filtroEstado === 'inactivos' && estado === 'Inactivo');
+
+          return pasaFiltroEstado;
+        });
+
+        $('#filtroEstado').on('change', function () {
+          tabla.draw();
+        });
+      } else {
+        $('#customSearchContainer').html('<p class="text-muted text-center">No hay datos para mostrar</p>');
+      }
+    });

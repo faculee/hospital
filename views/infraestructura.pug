@@ -1,0 +1,205 @@
+extends layout
+
+block content
+  style.
+    .navegacion-secciones .btn {
+      background-color: #343a40; 
+      color: #fff;
+      border: 1px solid #343a40;
+      height: 40px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      border-radius: 4px;  
+    }
+    .navegacion-secciones .btn:hover {
+      background-color: #495057;
+      color: #fff;
+      border-color: #495057;
+      transform: scale(1.03);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+    .card {
+      max-width: 900px; 
+      margin: auto;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    }
+    .seccion {
+      padding: 1.5rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      background-color: #f8f9fa; 
+    }
+    .titulo-seccion {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #343a40;
+    }
+    .table {
+      width: auto; 
+      max-width: 600px;
+      margin: 0 auto;
+      border-collapse: separate;
+      border-spacing: 0;
+      box-shadow: 0 0 0 1px #dee2e6; 
+    }
+    .table th {
+      background-color: #343a40; 
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .table td {
+      border: 1px solid #dee2e6;
+      padding: 0.5rem;
+      background-color: #fff;
+    }
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+      width: 70%; 
+      margin-left: auto;
+      margin-right: auto;
+      gap: 0.5rem; 
+    }
+    .btn-action {
+      min-width: 160px;
+      padding: 0.375rem 0.75rem;
+      font-weight: 500;
+      border-radius: 4px;
+    }
+    .btn-primary {
+      background-color: #0d6efd; 
+      border-color: #0d6efd;
+    }
+    .btn-dark {
+      background-color: #343a40; 
+      border-color: #343a40;
+    }
+    .acciones-botones {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-sm {
+      min-width: 35px;
+      padding: 0.25rem 0.5rem;
+    }
+    th.acciones, td.acciones {
+      width: 120px; 
+    }
+    th.acciones, td.acciones {
+      width: 160px; 
+    }
+  .card.shadow
+    .card-body
+      h2.text-center.h5.mb-4 Infraestructura Hospitalaria
+
+      // Botones de navegación
+      .mb-4.navegacion-secciones
+        .card-body
+          .row.justify-content-center.g-2
+            each seccion, index in ['unidades', 'alas', 'habitaciones']
+              .col-md-3.col-sm-6.col-6
+                button.btn.btn-dark.w-100(
+                  type="button",
+                  data-seccion=seccion
+                )= seccion.charAt(0).toUpperCase() + seccion.slice(1)
+
+      // Mensajes global para todo el módulo
+      #mensajes.mt-3.text-center
+
+      // Unidades
+      .seccion#unidades
+        h3.titulo-seccion Unidades de Atención / Internación
+        .row.mb-3
+          .col-md-6.offset-md-3.d-flex.justify-content-between.align-items-center
+            input.form-control#busquedaUnidades(type="text", placeholder="Buscar unidad...", style="width: 60%;")
+            button.btn.btn-dark#btnAgregarUnidad(style="min-width: 160px; margin-left: 1rem;") Nueva
+        table.table.table-bordered.table-sm
+          thead
+            tr
+              th Nombre
+              th.acciones Acciones
+          tbody#tablaUnidades
+        nav.mt-3.d-flex.justify-content-center
+          ul.pagination#paginacionUnidades
+
+      // Alas
+      .seccion#alas(style="display:none")
+        h3.titulo-seccion Alas
+        .row.mb-3
+          .col-md-6.offset-md-3.d-flex.justify-content-between.align-items-center
+            input.form-control#busquedaAlas(type="text", placeholder="Buscar ala...", style="width: 60%;")
+            button.btn.btn-dark#btnAgregarAla(style="min-width: 160px; margin-left: 1rem;") Nueva
+        table.table.table-bordered.table-sm
+          thead
+            tr
+              th Nombre
+              th.acciones Acciones
+          tbody#tablaAlas
+        nav.mt-3.d-flex.justify-content-center
+          ul.pagination#paginacionAlas
+
+      // Habitaciones
+      .seccion#habitaciones(style="display:none")
+        h3.titulo-seccion.text-center Habitaciones
+
+        .card.p-3.mb-2#consultar-habitaciones
+          .row.mb-2.justify-content-center
+            .col-md-4.mb-2
+              label.form-label.text-center.w-100(for="filtroUnidad") Seleccione Unidad
+              select.form-select#filtroUnidad
+                option(value="") Seleccione...
+                option(value="todas") Todas
+            .col-md-4.mb-2
+              label.form-label.text-center.w-100(for="filtroAla") Seleccione Ala
+              select.form-select#filtroAla
+                option(value="") Seleccione...
+                option(value="todas") Todas
+            .col-md-3.mb-2.d-flex.align-items-end.justify-content-center
+              button.btn.btn-primary.w-100#btnBuscarHabitaciones Ver Habitaciones
+
+        .d-flex.justify-content-center.mb-2
+          button.btn.btn-dark.w-25#btnAgregarHabitacion Nueva
+
+        table.table.table-bordered.table-sm.mt-3
+          thead
+            tr
+              th Habitación
+              th Unidad
+              th Ala
+              th.acciones Acciones
+          tbody#tablaHabitaciones
+
+        nav.mt-3.d-flex.justify-content-center
+          ul.pagination#paginacionHabitaciones
+
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  script(type="module", src="/js/infraestructura.js")
+
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const botones = document.querySelectorAll('button[data-seccion]');
+      const secciones = ['unidades', 'alas', 'habitaciones'];
+
+      function mostrarSeccion(id) {
+        secciones.forEach(s => {
+          const el = document.getElementById(s);
+          if (el) el.style.display = (s === id) ? 'block' : 'none';
+        });
+      }
+
+      botones.forEach(btn => {
+        btn.addEventListener('click', () => {
+          mostrarSeccion(btn.dataset.seccion);
+        });
+      });
+
+      mostrarSeccion('unidades');
+    });

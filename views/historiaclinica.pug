@@ -1,0 +1,218 @@
+extends layout
+
+block content
+
+  style.
+    .navegacion-secciones .btn {
+      background-color: #000;
+      color: #fff;
+      border: 2px solid #000;
+      height: 40px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      min-width: 160px;
+    }
+
+    .navegacion-secciones .btn:hover {
+      background-color: #fff;
+      color: #000;
+      border-color: #000;
+      transform: scale(1.03);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .titulo-ficha {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+      border-bottom: 3px solid #296caf;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    .seccion {
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      background-color: #f4f8fb;
+      display: none;
+    }
+
+    .table th {
+      background-color: rgb(41, 108, 175);
+      border: 1px solid rgb(41, 108, 175); 
+      color: #f8f9fa;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .table tbody td {
+      border: 1px solid rgb(41, 108, 175); 
+    }
+
+    .col-fecha { width: 10%; text-align: center; }
+    .col-medico { width: 20%; text-align: center; }
+    .col-medicamento { width: 30%; }
+    .col-cantidad { width: 10%; text-align: center; }
+    .col-anestesia { width: 20%; }
+    .col-observaciones { width: 40%; }
+    .col-tipo { width: 20%; }
+    .col-valor { width: 10%; text-align: center; }
+
+    .navegacion-secciones {
+      background-color: rgb(41, 108, 175); 
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #detalleInternacion .card {
+      border-left: 4px solid #198754;
+      background-color: #e9f7ef;
+    }
+
+  .card.shadow.mb-4
+    .card-body
+      h2.text-center.h5.mb-4 Historia Clínica del Paciente
+      include componentes/_busquedaPaciente.pug
+
+  // Antecedentes personales
+  .card.shadow.mb-4(style="display: none;" id="cardAntecedentes")
+    .card-body
+      h3.titulo-ficha Antecedentes Personales
+      table.table.table-bordered.table-sm.mt-3
+        thead
+          tr
+            th Fecha
+            th Médico
+            th Tipo de Antecedente
+            th Notas
+        tbody#tablaAntecedentes
+
+  // Internaciones + navegación
+  .card.shadow.secciones-container(style="display: none;")
+    .card-body
+      h3.titulo-ficha Registro de Internaciones del Paciente
+
+      #selectorInternaciones(style="display: none;")
+      #detalleInternacion
+
+      .navegacion-secciones
+        .d-grid(style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem;")
+          button.btn.btn-outline-primary.w-100(type="button", data-seccion="evaluaciones") Ev. Médicas
+          button.btn.btn-outline-primary.w-100(type="button", data-seccion="prescripciones") Medicamentos
+          button.btn.btn-outline-primary.w-100(type="button", data-seccion="estudios") Estudios
+          button.btn.btn-outline-primary.w-100(type="button", data-seccion="cirugias") Cirugías
+          button.btn.btn-outline-primary.w-100(type="button", data-seccion="terapias") Terapias
+          button.btn.btn-outline-primary.w-100(type="button", data-seccion="evaluacionesEnfermeria") Ev. Enfermería
+          button.btn.btn-outline-primary.w-100(type="button", data-seccion="notasEnfermeria") Notas Enfermería
+
+      .seccion#evaluaciones
+        h3.titulo-ficha Evaluaciones Médicas
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th.col-tipo Diagnóstico
+              th.col-observaciones Observaciones
+          tbody#tablaEvaluaciones
+
+      .seccion#prescripciones
+        h3.titulo-ficha Medicamentos
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th.col-medicamento Medicamento
+              th.col-cantidad Cantidad
+              th.col-observaciones Observaciones
+          tbody#tablaMedicamentos
+
+      .seccion#estudios
+        h3.titulo-ficha Estudios / Análisis
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th.col-tipo Tipo de Estudio
+              th.col-observaciones Observaciones
+          tbody#tablaEstudios
+
+      .seccion#cirugias
+        h3.titulo-ficha Cirugías
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th.col-tipo Tipo de Cirugía
+              th.col-anestesia Tipo de Anestesia
+              th.col-observaciones Observaciones
+          tbody#tablaCirugias
+
+      .seccion#terapias
+        h3.titulo-ficha Terapias
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th.col-tipo Tipo de Terapia
+              th.col-observaciones Observaciones
+          tbody#tablaTerapias
+
+      .seccion#evaluacionesEnfermeria
+        h3.titulo-ficha Evaluaciones de Enfermería
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Enfermero
+              th.col-valor.text-center PA
+              th.col-valor.text-center FC
+              th.col-valor.text-center FR
+              th.col-valor.text-center Temp.
+              th.col-valor.text-center SpO₂
+              th.col-observaciones Observaciones
+          tbody#tablaEvaluacionesEnfermeria
+
+      .seccion#notasEnfermeria
+        h3.titulo-ficha Notas de Enfermería
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Enfermero
+              th.col-observaciones Nota
+          tbody#tablaNotas
+
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  script(type="module", src="/js/historiaClinica.js")
+
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const botones = document.querySelectorAll('button[data-seccion]');
+      const secciones = ['evaluaciones', 'prescripciones', 'estudios', 'cirugias', 'terapias', 'evaluacionesEnfermeria', 'notasEnfermeria'];
+
+      function mostrarSeccion(id) {
+        secciones.forEach(s => {
+          const el = document.getElementById(s);
+          if (el) el.style.display = (s === id) ? 'block' : 'none';
+        });
+      }
+
+      botones.forEach(btn => {
+        btn.addEventListener('click', () => {
+          mostrarSeccion(btn.dataset.seccion);
+        });
+      });
+
+      mostrarSeccion('evaluaciones');
+    });

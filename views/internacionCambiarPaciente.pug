@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-6.bg-white.shadow-lg.rounded.p-4
+        h2.text-center.h5.mb-4 Cambiar paciente de internación
+
+        p.text-center.text-muted.mb-4 Seleccione una internación existente y asigne un nuevo paciente.
+
+        .d-flex.justify-content-center
+          button#btnCambiarPaciente.btn.btn-primary Comenzar
+
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  script(type="module", src="/js/internacionCambiarPaciente.js")

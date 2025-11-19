@@ -1,0 +1,25 @@
+extends layout-login
+
+block content
+  .card.shadow-lg.p-5(style="min-width: 400px;")
+
+    h3.mb-4.text-center.text-primary Iniciar Sesión
+    h6.mb-4.text-center.text-info Gestión de Admisión e Internación Hospitalaria
+    
+    form(action="/login", method="POST")
+      .mb-3
+        label.form-label(for="usuario") Usuario:
+        input.form-control(type="text", name="usuario", required, autofocus, autocomplete="new-password")
+
+      .mb-3
+        label.form-label(for="password") Contraseña:
+        input.form-control(type="password", name="password", required)
+
+      button.btn.btn-primary.w-100.mt-3(type="submit") Ingresar
+
+    if error
+      .alert.alert-danger.mt-3.text-center #{error}
+    
+    
+    .mt-4.text-center.text-muted
+      p  © Facu Garcia (2025)

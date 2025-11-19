@@ -1,0 +1,145 @@
+extends layout
+
+block extraHead
+  script(src="https://code.jquery.com/jquery-3.7.1.min.js")
+  script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js")
+  link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css")
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  script(type="module", src="/js/usuarios.js")
+
+block content
+  style.
+    .table th {
+      background-color: #343a40; 
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      padding: 0.75rem;
+    }
+    .table tbody td {
+      border: 1px solid #dee2e6;
+    }
+    #mensajes {
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .col-fecha {
+      width: 10%;
+      text-align: center;
+    }
+    .col-medico {
+      width: 25%;
+      text-align: center;
+    }
+    .col-cantidad {
+      width: 5%;
+      text-align: center;
+    }
+    .col-medicamento {
+      width: 30%;
+    }
+    .col-observaciones {
+      width: 30%;
+    }
+    textarea.form-control {
+      min-height: 38px;
+      resize: vertical;
+    }
+    .form-select {
+      cursor: pointer;
+    }
+    .btn-registrar {
+      min-width: 180px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+    }
+    .mb-3 {
+      margin-bottom: 1.2rem !important;
+    }
+    .mb-4 {
+      margin-bottom: 1.8rem !important;
+    }
+    .col-matricula {
+      transition: all 0.3s ease;
+    }
+    .select2-container .select2-selection--single {
+        height: 38px !important; 
+        padding: 0.375rem 0.75rem; 
+        line-height: 1.5 !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 1.5 !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 38px !important;
+    }
+  // Card del formulario
+  .card.shadow.mb-4
+    .card-body
+      h2.text-center.h5.mb-4 Administración de Usuarios
+      form#formUsuario
+
+        .row.mb-3.justify-content-center
+          .col-md-4.text-center
+            label.form-label(for="idrol") Seleccione un Rol:
+            select.form-select#idrol.form-select(name="idrol")
+              option(value="") Seleccione un rol
+
+        // Contenedor de campos de usuario
+        #camposUsuario(style="display:none")
+          input(type="hidden", id="idusuario")
+          .row.mb-3
+            .col-md-6#contenedorProfesional
+              label.form-label.text-center.w-100(for="profesional", id="labelProfesional") Seleccione Profesional:
+              select.form-select#profesional.select2(style="width: 100%", disabled=true)
+                option(value="") Seleccione médico/enfermero según rol
+            .col-md-6
+              label.form-label.text-center.w-100(for="nombre") Apellido y Nombres:
+              input.form-control#nombre(type="text", autocomplete="off", style="text-transform: uppercase;")
+            .col-md-2
+              label.form-label.text-center.w-100(for="usuario") Identificación (alias):
+              input.form-control#usuario(type="text", autocomplete="off")
+            .col-md-2
+              label.form-label.text-center.w-100(for="password") Contraseña:
+              input.form-control#password(type="password")
+            .col-md-2
+              label.form-label.text-center.w-100(for="activo") Estado:
+              select.form-select#activo(name="activo")
+                option(value="true") Activo
+                option(value="false") Inactivo
+
+          .mt-4
+            .row.justify-content-center
+              .col-md-3.d-grid
+                button.btn.btn-dark#btnNuevo(type="button") Nuevo
+              .col-md-3.d-grid
+                button.btn.btn-primary#btnGuardar(type="submit") Guardar usuario
+
+        #mensajes.text-center
+
+  // Card de la lista de usuarios
+  .card.shadow#cardTablaUsuarios(style="display:none")
+    .card-body
+      h5.text-center.mb-3#tituloUsuarios Lista de Usuarios Registrados
+      .row.mb-4
+        .col-12.d-flex.justify-content-center.align-items-center
+          label.form-label.fw-bold.me-2.mb-0(for="inputBusquedaUsuario") Buscar Usuario:
+          input.form-control#inputBusquedaUsuario(type="text", placeholder="Buscar usuario...", style="max-width:400px;")
+
+      table.table.table-bordered.table-sm.text-center
+        thead
+          tr
+            th ID
+            th Nombre
+            th Usuario
+            th Rol
+            th.col-matricula Matrícula
+            th Estado
+            th Acciones
+        tbody#tablaUsuarios
+
+      nav.mt-3.d-flex.justify-content-center
+        ul.pagination#paginacionUsuarios

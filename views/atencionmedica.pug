@@ -1,0 +1,349 @@
+extends layout
+
+block content
+
+  style.
+    .navegacion-secciones .btn {
+      background-color: #000;
+      color: #fff;
+      border: 2px solid #000;
+      height: 40px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+    }
+
+    .navegacion-secciones .btn:hover {
+      background-color: #fff;
+      color: #000;
+      border-color: #000;
+      transform: scale(1.03);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (min-width: 768px) {
+      .navegacion-secciones .col-md-2 {
+        flex: 0 0 18%;
+        max-width: 18%;
+      }
+    }
+
+    .seccion {
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .seccion-1 {
+      background-color: rgb(179, 203, 224);
+    }
+
+    .seccion-2 {
+      background-color: rgb(171, 200, 226);
+    }
+
+    #seccionAltaPaciente {
+      background-color:rgb(143, 181, 224); 
+    }
+
+    .titulo-seccion {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .table th {
+      background-color: rgb(41, 108, 175);
+      color: #f8f9fa;
+      font-weight: bold;
+      border: 1px solid rgb(41, 108, 175);
+      text-align: center;
+    }
+
+    .table tbody td {
+      border: 1px solid #dee2e6;
+    }
+
+    .navegacion-secciones {
+      background-color: rgb(131, 184, 209);
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #mensajes {
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .secciones-container {
+      background-color: #fdfdfe;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 3rem;
+    }
+
+    .col-fecha {
+      width: 10%;
+      text-align: center;
+    }
+
+    .col-medico {
+      width: 25%;
+      text-align: center;
+    }
+
+    .col-cantidad {
+      width: 5%;
+      text-align: center;
+    }
+
+    .col-medicamento {
+      width: 30%;
+    }
+
+    .col-observaciones {
+      width: 30%;
+    }
+
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #495057;
+    }
+
+    textarea.form-control {
+      min-height: 38px;
+      resize: vertical;
+    }
+
+    .form-select {
+      cursor: pointer;
+    }
+
+    .btn-registrar {
+      min-width: 220px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+    }
+
+    .mb-3 {
+      margin-bottom: 1.2rem !important;
+    }
+
+    .mb-4 {
+      margin-bottom: 1.8rem !important;
+    }
+
+  .card.shadow.mb-4
+    .card-body
+      h2.text-center.h5.mb-4 Registros de atención médica durante la Internación
+      include componentes/_busquedaPaciente.pug
+      #datosInternacion
+
+  .card.shadow.secciones-container(style="display: none;" id="contenedorAtencionMedica")
+    .card-body
+
+      // Botones de navegación
+      .mb-4.navegacion-secciones
+        .card-body
+          .row.justify-content-center.g-3
+            each seccion, index in ['evaluaciones', 'medicamentos', 'estudios', 'cirugias', 'terapias']
+              .col-md-2.col-sm-4.col-6
+                button.btn.btn-outline-primary.w-100(
+                  type="button",
+                  data-seccion=seccion
+                )= seccion.charAt(0).toUpperCase() + seccion.slice(1)
+
+      #mensajesSeccion.mt-3.text-center
+
+      // 1. Evaluaciones
+      form.seccion.seccion-1#evaluaciones
+        h3.titulo-seccion Evaluaciones
+        .row.mb-2
+          .col-md-12
+            label.form-label.text-center(for="diagnosticoEvaluacion") Diagnóstico:
+            select.form-select#diagnosticoEvaluacion
+              option(value="") Seleccione diagnóstico
+        .row.mb-2
+          .col-md-12
+            label.form-label.text-center(for="observacionesEvaluacion", rows="2") Observaciones:
+            textarea.form-control(id="observacionesEvaluacion", rows="2", style="text-transform: uppercase;")
+        .row.mb-3
+          .col-12.d-flex.justify-content-end
+            button.btn.btn-primary.btn-registrar#btnRegistrarEvaluacion(type="submit") Registrar Evaluación
+
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th Diagnóstico
+              th.col-observaciones Observaciones
+          tbody#tablaEvaluaciones
+
+      // 2. Medicamentos
+      form.seccion.seccion-2#medicamentos
+        h3.titulo-seccion.text-center Medicamentos
+
+        .row.mb-2.justify-content-center
+          .col-md-6.text-center
+            label.form-label(for="medicamentoPrescripcion") Medicamento:
+            select.form-select.mx-auto#medicamentoPrescripcion
+              option(value="") Seleccione medicamento
+
+          .col-md-2.text-center
+            label.form-label(for="cantidadPrescripcion") Cantidad:
+            input.form-control.text-center.mx-auto(type="number", id="cantidadPrescripcion", min="1")
+
+          .col-md-4.text-center
+            label.form-label(for="observacionesPrescripcion") Observaciones:
+            input.form-control.text-center.mx-auto(type="text", id="observacionesPrescripcion", style="text-transform: uppercase;")
+
+        .row.mb-3
+          .col-12.d-flex.justify-content-end
+            button.btn.btn-primary.btn-registrar#btnRegistrarPrescripcion(type="submit") Registrar Medicamento
+
+
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th.col-medicamento Medicamento
+              th.col-cantidad Cantidad
+              th.col-observaciones Observaciones
+          tbody#tablaMedicamentos
+
+      // 3. Estudios 
+      form.seccion.seccion-1#estudios
+        h3.titulo-seccion.text-center Estudios / Análisis
+        .row.mb-3
+          .col-md-4
+            label.form-label.text-center(for="tipoEstudio") Tipo de estudio:
+            select.form-select#tipoEstudio
+              option(value="") Seleccione tipo de estudio
+          .col-md-8
+            label.form-label.text-center(for="observacionesEstudios") Observaciones:
+            input.form-control(type="text", id="observacionesEstudios", style="text-transform: uppercase;")
+        .row.mb-3
+          .col-12.d-flex.justify-content-end
+            button.btn.btn-primary.btn-registrar#btnRegistrarEstudio(type="submit") Registrar Estudio
+
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th Tipo de Estudio
+              th.col-observaciones Observaciones
+          tbody#tablaEstudios
+
+      // 4. Cirugías
+      form.seccion.seccion-2#cirugias
+        h3.titulo-seccion.text-center Cirugías
+        .row.mb-3
+          .col-md-6
+            label.form-label.text-center(for="tipoCirugia") Tipo de cirugía:
+            select.form-select#tipoCirugia
+              option(value="") Seleccione tipo de cirugía
+          .col-md-6
+            label.form-label.text-center(for="tipoAnestesia") Tipo de anestesia:
+            select.form-select#tipoAnestesia
+              option(value="") Seleccione tipo de anestesia
+        .row.mb-3
+          .col-md-12
+            label.form-label.text-center(for="observacionesCirugia") Observaciones:
+            textarea.form-control(id="observacionesCirugia", rows="2", style="text-transform: uppercase;")
+        .row.mb-3
+          .col-12.d-flex.justify-content-end
+            button.btn.btn-primary.btn-registrar#btnRegistrarCirugia(type="submit") Registrar Cirugía
+
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th Tipo de Cirugía
+              th Tipo de Anestesia
+              th.col-observaciones Observaciones
+          tbody#tablaCirugias
+
+      // 5. Terapias
+      form.seccion.seccion-1#terapias
+        h3.titulo-seccion.text-center Terapias
+        .row.mb-3
+          .col-md-4
+            label.form-label.text-center(for="tipoTerapia") Tipo de terapia:
+            select.form-select#tipoTerapia
+              option(value="") Seleccione tipo de terapia
+          .col-md-8
+            label.form-label.text-center(for="observacionesTerapia") Observaciones:
+            textarea.form-control(id="observacionesTerapia", rows="1", style="text-transform: uppercase;")
+        .row.mb-3
+          .col-12.d-flex.justify-content-end
+            button.btn.btn-primary.btn-registrar#btnRegistrarTerapia(type="submit") Registrar Terapia
+
+        table.table.table-bordered.table-sm.tabla
+          thead
+            tr
+              th.col-fecha Fecha
+              th.col-medico Médico
+              th Tipo de Terapia
+              th.col-observaciones Observaciones
+          tbody#tablaTerapias
+
+
+      // 6. Apartado para el Alta
+      .card.shadow.seccion.seccion-2.mt-4#seccionAltaPaciente(style="display: block;")
+        .card-body
+          h3.titulo-seccion Alta de Paciente
+
+          form#formAltaPaciente
+
+            .row.mb-3
+              .col-md-4
+                label.form-label.text-center(for="tipoAltaPaciente") Motivo de alta:
+                select.form-select#tipoAltaPaciente(required)
+                  option(value="") Seleccione motivo
+                
+              .col-md-4.d-none#contenedorActaDefuncion
+                label.form-label.text-center(for="actaDefuncion") N° Acta de defunción:
+                input.form-control.text-center.mx-auto(type="text", id="actaDefuncion", maxlength="40", autocomplete="off")
+
+            .row.mb-3
+              .col-md-12
+                label.form-label.text-center(for="indicacionesAlta") Indicaciones médicas:
+                textarea.form-control.text-center.mx-auto(id="indicacionesAlta", rows="3", style="text-transform: uppercase;")
+
+            .row.mt-3
+              .col-12.d-flex.justify-content-end
+                button.btn.btn-primary.btn-registrar(type="submit") Registrar Alta
+
+
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  script(type="module", src="/js/atencionmedica.js")
+
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const botones = document.querySelectorAll('button[data-seccion]');
+      const secciones = ['evaluaciones', 'medicamentos', 'estudios', 'cirugias', 'terapias'];
+
+      function mostrarSeccion(id) {
+        secciones.forEach(s => {
+          const el = document.getElementById(s);
+          if (el) el.style.display = (s === id) ? 'block' : 'none';
+        });
+      }
+
+      botones.forEach(btn => {
+        btn.addEventListener('click', () => {
+          mostrarSeccion(btn.dataset.seccion);
+        });
+      });
+
+      mostrarSeccion('evaluaciones');
+    });

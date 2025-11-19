@@ -1,0 +1,114 @@
+extends layout
+
+block extraHead
+  script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+  link(rel="stylesheet", href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css")
+  script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+  script(src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js")
+  style.
+    .cama-ocupada {
+      background-color: #ffdddd !important;
+      font-weight: bold;
+    }
+    .texto-disponible {
+      color: #6c757d;
+      font-style: italic;
+    }
+
+block content
+  .card.shadow
+    .card-body
+      h2.text-center.h5.mb-4 Listado de Camas / Pacientes del Nosocomio
+
+      .row.mb-4.justify-content-center
+        .col-md-4
+          .input-group
+            span.input-group-text.fw-bold(style="min-width: 130px;") Mostrar camas
+            select#filtroCama.form-select
+              option(value="todas" selected) Todas
+              option(value="ocupadas") Ocupadas
+              option(value="vacias") Vacías
+        .col-md-4
+          .input-group
+            span.input-group-text.fw-bold Buscar
+            input#buscadorPersonalizado.form-control(type="text", placeholder="Ingrese búsqueda...")
+
+      table#tablaCamas.table.table-striped.mt-4
+        thead
+          tr
+            th Unidad
+            th Ala
+            th Habitación
+            th Cama
+            th Documento Paciente
+            th Apellido y Nombres
+            th Sexo
+            th Internación
+            th Fecha Ingreso
+        tbody
+          if camas && camas.length
+            each cama in camas
+              - var esOcupada = cama.idinternacion;
+              tr(class=esOcupada ? 'cama-ocupada' : '')
+                td= cama.unidad
+                td= cama.ala
+                td= cama.habitacion
+                td= cama.cama
+                td(class=!cama.documento_paciente ? 'texto-disponible' : '')= cama.documento_paciente || '---'
+                td(class=!cama.apellidonombres_paciente ? 'texto-disponible' : '')= cama.apellidonombres_paciente || '---'
+                td(class=!cama.sexo_paciente ? 'texto-disponible' : '')= cama.sexo_paciente || '---'
+                td(class=!cama.idinternacion ? 'texto-disponible' : '')= cama.idinternacion || '---'
+                td(class=!cama.fechadesde ? 'texto-disponible' : '')= cama.fechadesde || '---'
+          else
+            tr.no-data
+              td(colspan="9").text-center No hay datos de camas disponibles.
+
+  script.
+    $(document).ready(function () {
+      if ($('#tablaCamas tbody tr').not('.no-data').length > 0) {
+        const tabla = $('#tablaCamas').DataTable({
+          paging: true,
+          searching: true,
+          info: true,
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+          },
+          columnDefs: [
+            { targets: [0,1,2,3,6,8], searchable: false }
+          ],
+          initComplete: function () {
+            $('.dataTables_filter').hide();
+
+            $('#buscadorPersonalizado').on('keyup', function () {
+              tabla.search(this.value).draw();
+            });
+
+            $('.dataTables_paginate')
+              .addClass('d-flex justify-content-between align-items-center mt-3')
+              .find('a')
+              .addClass('btn btn-primary mx-1');
+
+            $('.dataTables_info')
+              .addClass('mt-3 fw-bold text-center w-100');
+          }
+        });
+
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+          const filtro = $('#filtroCama').val();
+          const internacion = data[7].trim();
+          const esOcupada = internacion !== '' && internacion !== '---';
+
+          if (filtro === 'todas') return true;
+          if (filtro === 'ocupadas') return esOcupada;
+          if (filtro === 'vacias') return !esOcupada;
+          return true;
+        });
+
+        $('#filtroCama').on('change', function () {
+          tabla.draw();
+        });
+
+      } else {
+        $('#customSearchContainer').html('<p class="text-muted text-center">No hay datos para mostrar</p>');
+      }
+    });
