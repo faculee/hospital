@@ -16,7 +16,7 @@ const atencionMedicaController = {
       }
 
 
-      if (!idinternacion  || !iddiagnostico == undefined) {
+      if (!idinternacion  || !iddiagnostico) {
         return res.status(400).json({ success: false, message: 'Faltan campos obligatorios.' });
       }
 
@@ -113,7 +113,7 @@ const atencionMedicaController = {
         return res.status(403).json({ success: false, message: 'Acceso no autorizado.' });
       }
 
-      if (!idinternacion || !idestudio == undefined) {
+      if (!idinternacion || !idestudio) {
         return res.status(400).json({ success: false, message: 'Faltan campos obligatorios.' });
       }
 
@@ -159,7 +159,7 @@ const atencionMedicaController = {
         return res.status(403).json({ success: false, message: 'Acceso no autorizado.' });
       }
 
-      if (!idinternacion || !idtipocirugia == undefined || !idtipoanestesia == undefined ) {
+      if (!idinternacion || !idtipocirugia  || !idtipoanestesia) {
         return res.status(400).json({ success: false, message: 'Faltan campos obligatorios.' });
       }
 
@@ -206,7 +206,7 @@ const atencionMedicaController = {
         return res.status(403).json({ success: false, message: 'Acceso no autorizado.' });
       }
 
-      if (!idinternacion || !idtipoterapia == undefined) {
+      if (!idinternacion || !idtipoterapia) {
         return res.status(400).json({ success: false, message: 'Faltan campos obligatorios.' });
       }
       
