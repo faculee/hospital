@@ -1,14 +1,6 @@
-//require('dotenv').config(); 
+require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
-
-const sequelize = new Sequelize('hospital', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql',
-});
-
-
-/*
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -18,11 +10,19 @@ const sequelize = new Sequelize(
     port: Number(process.env.DB_PORT),
     dialect: 'mysql',
     logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true
+      },
+      connectTimeout: 20000,
+
+      allowPublicKeyRetrieval: true
+    }
   }
 );
 
 sequelize.authenticate()
   .then(() => console.log('✅ Conexión exitosa a Railway'))
   .catch(err => console.error('❌ Error de conexión:', err));
-*/
+
 module.exports = sequelize;
