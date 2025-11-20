@@ -207,8 +207,8 @@ function mostrarDetalleInternacion(int) {
             <div class="col-md-12 text-center">
                 <p class="mb-1">
                 <strong>Fecha: </strong> ${int.fechaalta ? formatearFecha(int.fechaalta) : 'Sin Alta'} |
-                <strong>Medico:</strong> ${int.medicoalta ? int.medicoAlta.apellidonombres : 'Sin Alta'} | 
-                <strong>Motivo:</strong> ${int.diagnosticoalta ? int.diagnosticoAlta.descripcion : 'Sin Alta'}  
+                <strong>Medico:</strong> ${int.medicoAlta ? int.medicoAlta.apellidonombres : 'Sin Alta'} | 
+                <strong>Motivo:</strong> ${int.tipoAlta ? int.tipoAlta.descripcion : 'Sin Alta'} 
                 </p>
             </div>
           </div>
