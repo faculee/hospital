@@ -19,6 +19,7 @@ const infraestructuraController = {
     try {
       const habitaciones = await sequelize.query(`
         SELECT DISTINCT
+          h.idunidad, 
           c.idcama,
           c.numerocama,
           h.nombrehabitacion,
