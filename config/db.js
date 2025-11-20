@@ -15,7 +15,6 @@ const sequelize = new Sequelize(
         require: true
       },
       connectTimeout: 20000,
-
       allowPublicKeyRetrieval: true
     }
   }
