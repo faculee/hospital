@@ -12,10 +12,11 @@ const sequelize = new Sequelize(
     logging: false,
     dialectOptions: {
       ssl: {
-        require: true
+        require: true,
+        rejectUnauthorized: false
       },
       connectTimeout: 20000,
-      allowPublicKeyRetrieval: true
+      //allowPublicKeyRetrieval: true
     }
   }
 );
